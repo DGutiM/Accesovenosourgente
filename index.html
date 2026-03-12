@@ -63,11 +63,6 @@
     font-weight:800;
     line-height:1;
   }
-  .counter-help{
-    margin-top:6px;
-    font-size:.82rem;
-    opacity:.92;
-  }
   .eyebrow{
     display:inline-flex;
     align-items:center;
@@ -298,6 +293,45 @@
     text-align:center;
   }
 
+
+  .hero-actions{margin-top:16px;display:flex;justify-content:center}
+  .admin-btn{
+    width:auto;
+    min-height:44px;
+    padding:12px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:none;
+    backdrop-filter:blur(6px);
+  }
+  .admin-btn:hover{filter:brightness(1.04)}
+  .admin-modal{
+    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(15,23,42,.45);padding:18px;z-index:1000;
+  }
+  .admin-modal.is-open{display:flex}
+  .admin-dialog{
+    width:min(100%,420px);background:#fff;border-radius:20px;padding:18px;
+    box-shadow:0 20px 50px rgba(15,23,42,.24);border:1px solid var(--line);
+  }
+  .admin-title{margin:0 0 6px;font-size:1.15rem;color:var(--text)}
+  .admin-subtitle{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+  .admin-close{
+    width:auto;min-height:40px;padding:10px 12px;border-radius:12px;box-shadow:none;
+    background:#eef5f6;color:var(--text);font-weight:700;margin-top:10px;
+  }
+  .admin-panel{
+    margin:16px 0 0;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card-soft);
+  }
+  .admin-panel h3{margin:0 0 8px;font-size:1rem}
+  .admin-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .admin-row button{width:auto;min-height:46px;padding:12px 16px;border-radius:14px}
+  .admin-meta{font-size:.9rem;color:var(--muted)}
+  .admin-counter{margin-top:12px;padding:14px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+  .admin-counter-label{font-size:.84rem;font-weight:700;color:var(--muted)}
+  .admin-counter-value{margin-top:4px;font-size:1.8rem;font-weight:800;line-height:1;color:var(--accent)}
+
   @media (max-width:720px){
     .grid{grid-template-columns:1fr}
     .section-header{align-items:flex-start}
@@ -308,42 +342,6 @@
     h1{font-size:1.5rem}
   }
 
-
-  .hero-actions{margin-top:14px;display:flex;justify-content:center}
-  .admin-btn{
-    width:auto;min-height:auto;padding:10px 16px;border-radius:999px;
-    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);
-    box-shadow:none;font-size:.92rem;font-weight:700
-  }
-  .admin-btn:hover{filter:brightness(1.04)}
-  .admin-panel{
-    margin-top:18px;padding:16px;border-radius:18px;background:var(--card-soft);
-    border:1px solid var(--line)
-  }
-  .admin-panel h3{margin:0 0 8px;font-size:1rem}
-  .admin-panel p{margin:0 0 10px;color:#334155;font-size:.92rem}
-  .admin-email{font-size:.88rem;color:var(--muted);margin-bottom:12px;word-break:break-word}
-  .admin-actions{display:flex;gap:10px;flex-wrap:wrap}
-  .admin-actions button{width:auto;min-width:180px}
-  .ghost-btn{
-    background:#fff;color:var(--text);border:1px solid var(--line);box-shadow:none
-  }
-  .modal{
-    position:fixed;inset:0;background:rgba(15,23,42,.48);display:flex;align-items:center;
-    justify-content:center;padding:18px;z-index:50
-  }
-  .modal.hidden{display:none!important}
-  .modal-card{
-    width:min(100%,480px);background:#fff;border-radius:22px;padding:18px;border:1px solid var(--line);
-    box-shadow:0 24px 60px rgba(15,23,42,.24)
-  }
-  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-  .modal-head h3{margin:0;font-size:1.05rem}
-  .modal-close{width:40px;min-height:40px;padding:0;border-radius:999px;background:#f8fafc;color:#334155;box-shadow:none}
-  .modal-text{margin:0 0 14px;color:#475569;font-size:.92rem}
-  .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-  .modal-actions button{flex:1 1 160px}
-
 </style>
 </head>
 <body>
@@ -351,10 +349,6 @@
     <div class="hero-inner">
       <div class="eyebrow">GTAV · Hospital Universitario de La Princesa</div>
       <h1>Registro de acceso vascular urgente</h1>
-      <div class="counter-box" aria-live="polite">
-        <div class="counter-label">Formularios registrados</div>
-        <div class="counter-value" id="submissionCount">—</div>
-      </div>
       <div class="hero-actions">
         <button type="button" id="openAdminBtn" class="admin-btn">Admin</button>
       </div>
@@ -600,16 +594,6 @@
           <p class="submit-note">Al enviar, la información se almacenará en una base de datos del estudio con fines de investigación y mejora asistencial, sin incluir identificadores directos del paciente.</p>
         </div>
 
-        <div id="adminPanel" class="admin-panel hidden">
-          <h3>Panel de administración</h3>
-          <p>Acceso autorizado. Desde aquí puedes descargar la base de datos en formato Excel.</p>
-          <div class="admin-email" id="adminEmailLabel"></div>
-          <div class="admin-actions">
-            <button type="button" id="downloadExcelBtn">Descargar Excel</button>
-            <button type="button" id="logoutAdminBtn" class="ghost-btn">Cerrar sesión</button>
-          </div>
-        </div>
-
         <div class="privacy">
           <h3>Política de privacidad</h3>
           <p>Este formulario está destinado exclusivamente a la recogida de datos clínicos estructurados del estudio de acceso vascular urgente del GTAV. No deben introducirse nombres, número de historia clínica, fecha de nacimiento completa ni otros identificadores directos del paciente.</p>
@@ -621,31 +605,40 @@
   </div>
 
 
-  <div id="adminModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
-      <div class="modal-head">
-        <h3 id="adminModalTitle">Acceso de administrador</h3>
-        <button type="button" id="closeAdminBtn" class="modal-close" aria-label="Cerrar">×</button>
-      </div>
-      <p class="modal-text">Inicia sesión con una cuenta autorizada para acceder a la descarga.</p>
+  <div class="admin-modal" id="adminModal" aria-hidden="true">
+    <div class="admin-dialog">
+      <h2 class="admin-title">Acceso administrador</h2>
+      <p class="admin-subtitle">Solo para administradores autorizados.</p>
       <div id="loginBox">
-        <label for="adminEmail">Correo electrónico</label>
-        <input id="adminEmail" type="email" autocomplete="username" inputmode="email" style="width:100%;min-height:52px;padding:14px 14px;border:1px solid var(--line);border-radius:14px;font-size:16px;background:#fff;color:var(--text);outline:none;">
-        <label for="adminPassword">Contraseña</label>
-        <input id="adminPassword" type="password" autocomplete="current-password" style="width:100%;min-height:52px;padding:14px 14px;border:1px solid var(--line);border-radius:14px;font-size:16px;background:#fff;color:var(--text);outline:none;">
-        <div class="modal-actions">
+        <label for="adminEmail" class="req">Correo electrónico</label>
+        <input id="adminEmail" type="email" autocomplete="username" style="width:100%;min-height:52px;padding:14px;border:1px solid var(--line);border-radius:14px;font-size:16px;">
+        <label for="adminPassword" class="req">Contraseña</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" style="width:100%;min-height:52px;padding:14px;border:1px solid var(--line);border-radius:14px;font-size:16px;">
+        <div class="admin-row">
           <button type="button" id="loginAdminBtn">Entrar</button>
-          <button type="button" id="cancelAdminBtn" class="ghost-btn">Cancelar</button>
+          <button type="button" id="closeAdminBtn" class="admin-close">Cerrar</button>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="admin-panel hidden">
+        <h3>Panel de administración</h3>
+        <div class="admin-meta" id="adminEmailLabel"></div>
+        <div class="admin-counter">
+          <div class="admin-counter-label">Formularios registrados</div>
+          <div class="admin-counter-value" id="adminSubmissionCount">—</div>
+        </div>
+        <div class="admin-row">
+          <button type="button" id="downloadExcelBtn">Descargar Excel</button>
+          <button type="button" id="logoutAdminBtn" class="admin-close">Cerrar sesión</button>
         </div>
       </div>
     </div>
   </div>
 
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-import { getFirestore, collection, addDoc, serverTimestamp, getCountFromServer, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const FIREBASE_CONFIG = {
   apiKey: 'AIzaSyAcoFXyxJ2_Keu2K5vtn4Tq2C_OmfhGJ5w',
@@ -656,11 +649,7 @@ const FIREBASE_CONFIG = {
   appId: '1:423402024206:web:2e2e0f6ff3e0ebf7323b5f'
 };
 const COLLECTION_NAME = 'registros';
-const ADMIN_EMAILS = [
-  'diegogutimartinez@gmail.com',
-  'gorria66@gmail.com',
-  'amadeamjertan@gmail.com'
-];
+const ADMIN_EMAILS = ['diegogutimartinez@gmail.com','gorria66@gmail.com','amadeamjertan@gmail.com'];
 
 const via = document.getElementById('via');
 const bloqueExtremidad = document.getElementById('bloqueExtremidad');
@@ -669,23 +658,23 @@ const extremidad = document.getElementById('extremidad');
 const cvcVena = document.getElementById('cvcVena');
 const cvcLado = document.getElementById('cvcLado');
 const form = document.getElementById('registroForm');
-const counterEl = document.getElementById('submissionCount');
-const openAdminBtn = document.getElementById('openAdminBtn');
-const adminModal = document.getElementById('adminModal');
-const closeAdminBtn = document.getElementById('closeAdminBtn');
-const cancelAdminBtn = document.getElementById('cancelAdminBtn');
-const loginAdminBtn = document.getElementById('loginAdminBtn');
-const logoutAdminBtn = document.getElementById('logoutAdminBtn');
-const downloadExcelBtn = document.getElementById('downloadExcelBtn');
-const adminPanel = document.getElementById('adminPanel');
-const adminEmailLabel = document.getElementById('adminEmailLabel');
-const adminEmailInput = document.getElementById('adminEmail');
-const adminPasswordInput = document.getElementById('adminPassword');
 
 const app = initializeApp(FIREBASE_CONFIG);
 const db = getFirestore(app);
 const auth = getAuth(app);
-let currentAdmin = null;
+
+const openAdminBtn = document.getElementById('openAdminBtn');
+const adminModal = document.getElementById('adminModal');
+const closeAdminBtn = document.getElementById('closeAdminBtn');
+const loginAdminBtn = document.getElementById('loginAdminBtn');
+const logoutAdminBtn = document.getElementById('logoutAdminBtn');
+const loginBox = document.getElementById('loginBox');
+const adminPanel = document.getElementById('adminPanel');
+const adminEmail = document.getElementById('adminEmail');
+const adminPassword = document.getElementById('adminPassword');
+const adminEmailLabel = document.getElementById('adminEmailLabel');
+const adminSubmissionCount = document.getElementById('adminSubmissionCount');
+const downloadExcelBtn = document.getElementById('downloadExcelBtn');
 
 function actualizarLocalizacion(){
   const v = via.value;
@@ -697,10 +686,12 @@ function actualizarLocalizacion(){
   extremidad.value = '';
   cvcVena.value = '';
   cvcLado.value = '';
+
   if(['Acceso venoso periférico','Midline','PICC'].includes(v)){
     bloqueExtremidad.classList.remove('hidden');
     extremidad.required = true;
   }
+
   if(v === 'Vía venosa central'){
     bloqueCvc.classList.remove('hidden');
     cvcVena.required = true;
@@ -749,111 +740,135 @@ function serializeForm(){
   };
 }
 
+
 function isAdminUser(user){
   return !!user && ADMIN_EMAILS.includes((user.email || '').toLowerCase());
 }
 
 function openAdminModal(){
-  adminModal.classList.remove('hidden');
-  adminModal.setAttribute('aria-hidden', 'false');
-  setTimeout(() => adminEmailInput.focus(), 50);
+  adminModal.classList.add('is-open');
+  adminModal.setAttribute('aria-hidden','false');
 }
 
 function closeAdminModal(){
-  adminModal.classList.add('hidden');
-  adminModal.setAttribute('aria-hidden', 'true');
-  adminPasswordInput.value = '';
-}
-
-function updateAdminUI(user){
-  currentAdmin = isAdminUser(user) ? user : null;
-  if(currentAdmin){
-    adminPanel.classList.remove('hidden');
-    adminEmailLabel.textContent = `Administrador conectado: ${currentAdmin.email}`;
-    closeAdminModal();
-  }else{
-    adminPanel.classList.add('hidden');
-    adminEmailLabel.textContent = '';
+  adminModal.classList.remove('is-open');
+  adminModal.setAttribute('aria-hidden','true');
+  if(!isAdminUser(auth.currentUser)){
+    adminPassword.value = '';
   }
 }
 
-async function updateSubmissionCount(){
+async function refreshAdminCounter(){
+  adminSubmissionCount.textContent = '…';
   try{
-    const snapshot = await getCountFromServer(collection(db, COLLECTION_NAME));
-    counterEl.textContent = snapshot.data().count;
+    const snap = await getDocs(collection(db, COLLECTION_NAME));
+    adminSubmissionCount.textContent = String(snap.size);
   }catch(error){
-    console.error('Error al leer el contador:', error);
-    counterEl.textContent = '—';
+    console.error('Error al leer contador admin:', error);
+    adminSubmissionCount.textContent = '—';
   }
 }
 
-function escapeCsv(value){
-  if(value === null || value === undefined) return '';
-  if(Array.isArray(value)) value = value.join(' | ');
-  if(typeof value === 'object') value = JSON.stringify(value);
-  const text = String(value);
-  return /[";,
-]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+function csvEscape(value){
+  if(value == null) return '';
+  const s = Array.isArray(value) ? value.join(' | ') : String(value);
+  return '"' + s.replace(/"/g,'""') + '"';
 }
 
-function downloadTextFile(filename, content, type){
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-async function downloadExcel(){
-  if(!currentAdmin){
-    showStatus('Debes iniciar sesión como administrador para descargar la base de datos.', true);
-    return;
-  }
+async function downloadAdminCsv(){
+  downloadExcelBtn.disabled = true;
+  const original = downloadExcelBtn.textContent;
+  downloadExcelBtn.textContent = 'Preparando…';
   try{
-    downloadExcelBtn.disabled = true;
-    downloadExcelBtn.textContent = 'Preparando Excel…';
-    let snapshot;
-    try{
-      snapshot = await getDocs(query(collection(db, COLLECTION_NAME), orderBy('createdAt', 'desc')));
-    }catch(_){
-      snapshot = await getDocs(collection(db, COLLECTION_NAME));
-    }
+    const snap = await getDocs(query(collection(db, COLLECTION_NAME), orderBy('createdAt', 'desc')));
     const rows = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
+    snap.forEach(doc => {
+      const d = doc.data();
       rows.push({
-        id: doc.id,
-        edad: data.edad ?? '', sexo: data.sexo ?? '', ubicacion: data.ubicacion ?? '', servicio: data.servicio ?? '',
-        momento: data.momento ?? '', momentoCanalizacion: data.momentoCanalizacion ?? '', motivo: data.motivo ?? '',
-        duracion: data.duracion ?? '', osmolaridad: data.osmolaridad ?? '', ph: data.ph ?? '', vesicante: data.vesicante ?? '',
-        factores: Array.isArray(data.factores) ? data.factores.join(' | ') : '', via: data.via ?? '', extremidad: data.extremidad ?? '',
-        cvcVena: data.cvcVena ?? '', cvcLado: data.cvcLado ?? '', eco: data.eco ?? '', intentos: data.intentos ?? '',
-        operador: data.operador ?? '', incidencias: Array.isArray(data.incidencias) ? data.incidencias.join(' | ') : '',
-        createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : '', source: data.source ?? ''
+        edad: d.edad ?? '',
+        sexo: d.sexo ?? '',
+        ubicacion: d.ubicacion ?? '',
+        servicio: d.servicio ?? '',
+        momento: d.momento ?? '',
+        momentoCanalizacion: d.momentoCanalizacion ?? '',
+        motivo: d.motivo ?? '',
+        duracion: d.duracion ?? '',
+        osmolaridad: d.osmolaridad ?? '',
+        ph: d.ph ?? '',
+        vesicante: d.vesicante ?? '',
+        factores: d.factores ?? [],
+        via: d.via ?? '',
+        extremidad: d.extremidad ?? '',
+        cvcVena: d.cvcVena ?? '',
+        cvcLado: d.cvcLado ?? '',
+        eco: d.eco ?? '',
+        intentos: d.intentos ?? '',
+        operador: d.operador ?? '',
+        incidencias: d.incidencias ?? [],
+        source: d.source ?? '',
+        createdAt: d.createdAt?.toDate ? d.createdAt.toDate().toISOString() : ''
       });
     });
-    const headers = ['id','edad','sexo','ubicacion','servicio','momento','momentoCanalizacion','motivo','duracion','osmolaridad','ph','vesicante','factores','via','extremidad','cvcVena','cvcLado','eco','intentos','operador','incidencias','createdAt','source'];
-    const bom = '﻿';
-    const csv = bom + [headers.join(';')].concat(rows.map(row => headers.map(h => escapeCsv(row[h])).join(';'))).join('
+    const headers = Object.keys(rows[0] || {
+      edad:'',sexo:'',ubicacion:'',servicio:'',momento:'',momentoCanalizacion:'',motivo:'',duracion:'',osmolaridad:'',ph:'',vesicante:'',factores:'',via:'',extremidad:'',cvcVena:'',cvcLado:'',eco:'',intentos:'',operador:'',incidencias:'',source:'',createdAt:''
+    });
+    const csv = [headers.join(',')].concat(rows.map(r => headers.map(h => csvEscape(r[h])).join(','))).join('
 ');
-    const stamp = new Date();
-    const y = stamp.getFullYear();
-    const m = String(stamp.getMonth() + 1).padStart(2, '0');
-    const d = String(stamp.getDate()).padStart(2, '0');
-    downloadTextFile(`gtav_registros_${y}${m}${d}.csv`, csv, 'text/csv;charset=utf-8;');
-    showStatus('Descarga preparada correctamente. Puedes abrir el CSV con Excel.', false);
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'registros_gtav.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }catch(error){
-    console.error('Error al descargar Excel:', error);
-    showStatus('No se pudo generar la descarga. Revisa que el usuario sea administrador y que las reglas de Firestore estén publicadas.', true);
+    console.error('Error al exportar CSV:', error);
+    alert('No se pudo descargar el Excel. Comprueba que has iniciado sesión como administrador.');
   }finally{
     downloadExcelBtn.disabled = false;
-    downloadExcelBtn.textContent = 'Descargar Excel';
+    downloadExcelBtn.textContent = original;
   }
 }
+
+openAdminBtn.addEventListener('click', openAdminModal);
+closeAdminBtn.addEventListener('click', closeAdminModal);
+adminModal.addEventListener('click', (e) => {
+  if(e.target === adminModal) closeAdminModal();
+});
+loginAdminBtn.addEventListener('click', async () => {
+  try{
+    loginAdminBtn.disabled = true;
+    const email = adminEmail.value.trim().toLowerCase();
+    const password = adminPassword.value;
+    await signInWithEmailAndPassword(auth, email, password);
+  }catch(error){
+    console.error('Error de login admin:', error);
+    alert('Acceso no válido. Revisa el correo y la contraseña.');
+  }finally{
+    loginAdminBtn.disabled = false;
+  }
+});
+logoutAdminBtn.addEventListener('click', async () => {
+  await signOut(auth);
+});
+downloadExcelBtn.addEventListener('click', downloadAdminCsv);
+
+onAuthStateChanged(auth, async (user) => {
+  if(isAdminUser(user)){
+    loginBox.classList.add('hidden');
+    adminPanel.classList.remove('hidden');
+    adminEmailLabel.textContent = user.email;
+    openAdminModal();
+    await refreshAdminCounter();
+  }else{
+    loginBox.classList.remove('hidden');
+    adminPanel.classList.add('hidden');
+    adminEmailLabel.textContent = '';
+    adminSubmissionCount.textContent = '—';
+  }
+});
 
 via.addEventListener('change', actualizarLocalizacion);
 actualizarLocalizacion();
@@ -871,61 +886,6 @@ incidenciaChecks.forEach(ch => {
   });
 });
 
-openAdminBtn.addEventListener('click', () => {
-  if(currentAdmin){
-    adminPanel.classList.remove('hidden');
-    adminPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }else{
-    openAdminModal();
-  }
-});
-closeAdminBtn.addEventListener('click', closeAdminModal);
-cancelAdminBtn.addEventListener('click', closeAdminModal);
-adminModal.addEventListener('click', e => { if(e.target === adminModal) closeAdminModal(); });
-document.addEventListener('keydown', e => { if(e.key === 'Escape' && !adminModal.classList.contains('hidden')) closeAdminModal(); });
-
-loginAdminBtn.addEventListener('click', async () => {
-  const email = adminEmailInput.value.trim().toLowerCase();
-  const password = adminPasswordInput.value;
-  if(!email || !password){
-    showStatus('Introduce correo y contraseña para entrar como administrador.', true);
-    return;
-  }
-  if(!ADMIN_EMAILS.includes(email)){
-    showStatus('Ese correo no está autorizado como administrador.', true);
-    return;
-  }
-  try{
-    loginAdminBtn.disabled = true;
-    loginAdminBtn.textContent = 'Entrando…';
-    await signInWithEmailAndPassword(auth, email, password);
-    showStatus('Sesión de administrador iniciada correctamente.', false);
-  }catch(error){
-    console.error('Error de inicio de sesión:', error);
-    showStatus('No se pudo iniciar sesión. Revisa el correo y la contraseña.', true);
-  }finally{
-    loginAdminBtn.disabled = false;
-    loginAdminBtn.textContent = 'Entrar';
-  }
-});
-
-logoutAdminBtn.addEventListener('click', async () => {
-  await signOut(auth);
-  showStatus('Sesión de administrador cerrada.', false);
-});
-downloadExcelBtn.addEventListener('click', downloadExcel);
-
-onAuthStateChanged(auth, async user => {
-  if(user && !isAdminUser(user)){
-    await signOut(auth);
-    updateAdminUI(null);
-    showStatus('Esta cuenta no está autorizada como administradora.', true);
-    return;
-  }
-  updateAdminUI(user);
-  await updateSubmissionCount();
-});
-
 form.addEventListener('submit', async function(e){
   e.preventDefault();
   const button = form.querySelector('button[type="submit"]');
@@ -937,7 +897,7 @@ form.addEventListener('submit', async function(e){
     form.reset();
     actualizarLocalizacion();
     showStatus('Registro enviado correctamente.');
-    if(currentAdmin) await updateSubmissionCount();
+    if(isAdminUser(auth.currentUser)) await refreshAdminCounter();
   }catch(error){
     console.error('Error al guardar en Firebase:', error);
     showStatus('No se pudo enviar el registro a Firebase. Revisa la configuración y los permisos de la base de datos.', true);
@@ -946,8 +906,6 @@ form.addEventListener('submit', async function(e){
     button.textContent = originalText;
   }
 });
-
-updateSubmissionCount();
 </script>
 </body>
 </html>
